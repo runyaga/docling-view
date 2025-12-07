@@ -37,11 +37,14 @@ docling-view docling_output.json -m overlay --open
 ## Development
 
 ```bash
-pip install -e ".[dev]"         # Install dev dependencies
-pre-commit install              # Set up git hooks
-pytest                          # Run tests
-pytest --cov=docling_view       # With coverage
-ruff check src/ && mypy src/    # Lint & type check
+make dev          # Install dev dependencies + pre-commit hooks
+make test         # Run tests
+make test-cov     # Run tests with coverage
+make lint         # Run linter
+make format       # Format code
+make typecheck    # Run type checker
+make check        # Run lint + typecheck + test
+make clean        # Remove build artifacts
 ```
 
 ## Architecture
