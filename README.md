@@ -28,6 +28,25 @@ docling-view document.pdf -m overlay -o visualizer.html
 docling-view docling_output.json -m overlay --open
 ```
 
+### How Overlay Mode Works
+
+In overlay mode, the tool renders PDF pages as background images and draws bounding boxes as SVG overlays:
+
+1. **PDF → Images**: Each PDF page is rendered to PNG using pypdfium2
+2. **JSON → Bounding Boxes**: Element coordinates from Docling JSON are transformed from PDF coordinates (BOTTOMLEFT origin) to screen coordinates (TOPLEFT origin)
+3. **HTML Output**: An interactive HTML page with page images and SVG overlays
+
+**PDF Location**: When processing a `.json` file, the tool looks for the source PDF:
+- First checks for `<filename>.pdf` in the same directory
+- Falls back to any single PDF in the directory
+- Without a PDF, bounding boxes display without background images
+
+```
+my_documents/
+├── report.json      # Docling output
+└── report.pdf       # Source PDF (same name)
+```
+
 ### Options
 
 | Option | Default | Description |
