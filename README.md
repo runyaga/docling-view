@@ -5,8 +5,11 @@ CLI tool for visualizing Docling document processing output.
 ## Installation
 
 ```bash
+# Using pip
 pip install -e .
-pip install -e ".[dev]"  # with dev dependencies
+
+# Using uv (recommended)
+uv sync
 ```
 
 ## Usage
