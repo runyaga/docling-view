@@ -1,7 +1,5 @@
 """Unit tests for coordinate normalizer."""
 
-import pytest
-
 from docling_view.core.normalizer import (
     CoordinateNormalizer,
     CoordOrigin,
@@ -61,22 +59,16 @@ class TestCoordinateNormalizer:
         self, sample_bbox_bottomleft: dict, standard_page_height: float
     ):
         """Test normalizing a BOTTOMLEFT coordinate bbox."""
-        bbox = CoordinateNormalizer.normalize_bbox(
-            sample_bbox_bottomleft, standard_page_height
-        )
+        bbox = CoordinateNormalizer.normalize_bbox(sample_bbox_bottomleft, standard_page_height)
 
         assert bbox.x == 72.0
         assert bbox.y == 792.0 - 720.0
         assert bbox.width == 300.0 - 72.0
         assert bbox.height == 720.0 - 650.0
 
-    def test_normalize_topleft_origin(
-        self, sample_bbox_topleft: dict, standard_page_height: float
-    ):
+    def test_normalize_topleft_origin(self, sample_bbox_topleft: dict, standard_page_height: float):
         """Test normalizing a TOPLEFT coordinate bbox (passthrough)."""
-        bbox = CoordinateNormalizer.normalize_bbox(
-            sample_bbox_topleft, standard_page_height
-        )
+        bbox = CoordinateNormalizer.normalize_bbox(sample_bbox_topleft, standard_page_height)
 
         assert bbox.x == 72.0
         assert bbox.y == 72.0
@@ -107,18 +99,14 @@ class TestCoordinateNormalizer:
         In BOTTOMLEFT: l=72, b=72, r=144, t=144
         Expected in TOPLEFT: y = 792 - 144 = 648
         """
-        bbox = CoordinateNormalizer.normalize_bbox(
-            ruler_test_bbox_bottomleft, standard_page_height
-        )
+        bbox = CoordinateNormalizer.normalize_bbox(ruler_test_bbox_bottomleft, standard_page_height)
 
         assert bbox.x == 72.0
         assert bbox.y == 792.0 - 144.0
         assert bbox.width == 72.0
         assert bbox.height == 72.0
 
-    def test_ruler_test_topleft(
-        self, ruler_test_bbox_topleft: dict, standard_page_height: float
-    ):
+    def test_ruler_test_topleft(self, ruler_test_bbox_topleft: dict, standard_page_height: float):
         """
         Validate coordinate transformation with known geometry.
 
@@ -126,9 +114,7 @@ class TestCoordinateNormalizer:
         In TOPLEFT: l=72, t=72, r=144, b=144
         Expected: coordinates unchanged.
         """
-        bbox = CoordinateNormalizer.normalize_bbox(
-            ruler_test_bbox_topleft, standard_page_height
-        )
+        bbox = CoordinateNormalizer.normalize_bbox(ruler_test_bbox_topleft, standard_page_height)
 
         assert bbox.x == 72.0
         assert bbox.y == 72.0

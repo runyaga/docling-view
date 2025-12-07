@@ -3,10 +3,7 @@
 import json
 from pathlib import Path
 
-import pytest
-
 from docling_view.core.parser import DoclingParser
-from docling_view.core.processor import DocumentProcessor
 from docling_view.renderers.overlay import OverlayRenderer
 
 

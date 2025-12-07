@@ -3,9 +3,8 @@
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from docling_core.types.doc.base import ImageRefMode
+
 from docling_view.renderers.native import NativeRenderer
 
 

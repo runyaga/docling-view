@@ -1,7 +1,6 @@
 """Unit tests for overlay SVG renderer."""
 
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 

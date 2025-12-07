@@ -1,7 +1,7 @@
 """CLI entry point for docling-view."""
 
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 from rich.console import Console
@@ -32,15 +32,13 @@ def validate_input_file(path: Path) -> Path:
 
     suffix = path.suffix.lower()
     if suffix not in (".pdf", ".json"):
-        console.print(
-            f"[red]Error:[/red] Unsupported file format '{suffix}'. Use .pdf or .json"
-        )
+        console.print(f"[red]Error:[/red] Unsupported file format '{suffix}'. Use .pdf or .json")
         raise typer.Exit(1)
 
     return path
 
 
-def resolve_output_path(input_path: Path, output: Optional[Path], mode: str) -> Path:
+def resolve_output_path(input_path: Path, output: Path | None, mode: str) -> Path:
     """Resolve output path, using input filename if not specified."""
     if output:
         return output
@@ -52,7 +50,7 @@ def resolve_output_path(input_path: Path, output: Optional[Path], mode: str) -> 
     return input_path.with_suffix(".html")
 
 
-@app.command()
+@app.command()  # type: ignore[misc]
 def main(
     input_file: Annotated[
         Path,
@@ -62,7 +60,7 @@ def main(
         ),
     ],
     output: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -100,11 +98,11 @@ def main(
         ),
     ] = False,
     types: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--types",
             "-t",
-            help="Filter element types (comma-separated): text,table,picture,heading,list,furniture",
+            help="Filter types: text,table,picture,heading,list,furniture",
         ),
     ] = None,
     verbose: Annotated[
@@ -116,7 +114,7 @@ def main(
         ),
     ] = False,
     version: Annotated[
-        Optional[bool],
+        bool | None,
         typer.Option(
             "--version",
             callback=version_callback,
@@ -143,7 +141,7 @@ def main(
     input_path = validate_input_file(input_file)
     output_path = resolve_output_path(input_path, output, mode)
 
-    element_types: Optional[list[str]] = None
+    element_types: list[str] | None = None
     if types:
         element_types = [t.strip().lower() for t in types.split(",")]
         valid_types = {"text", "table", "picture", "heading", "list", "furniture"}
@@ -183,7 +181,7 @@ def main(
         console.print(f"[red]Error:[/red] {e}")
         if verbose:
             console.print_exception()
-        raise typer.Exit(1)
+        raise typer.Exit(1) from None
 
 
 if __name__ == "__main__":

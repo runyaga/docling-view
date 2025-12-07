@@ -1,7 +1,5 @@
 """Unit tests for Docling JSON parser."""
 
-import pytest
-
 from docling_view.core.parser import (
     DoclingParser,
     DocumentItem,
