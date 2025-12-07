@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --dev
+      - run: uv sync --extra dev
       - run: uv run ruff check src/
       - run: uv run ruff format --check src/
 
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --dev
+      - run: uv sync --extra dev
       - run: uv run mypy src/
 
   test:
@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --dev
+      - run: uv sync --extra dev
       - run: uv run pytest --cov=docling_view --cov-report=xml --cov-fail-under=70
       - uses: codecov/codecov-action@v4
         with:
@@ -47,5 +47,5 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - run: uv sync --dev
+      - run: uv sync --extra dev
       - run: uv run pytest
