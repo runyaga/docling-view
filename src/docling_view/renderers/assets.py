@@ -118,7 +118,7 @@ class AssetRenderer:
             import pypdfium2 as pdfium
         except ImportError as e:
             raise ImportError(
-                "pypdfium2 is required for PDF rendering. " "Install with: pip install pypdfium2"
+                "pypdfium2 is required for PDF rendering. Install with: pip install pypdfium2"
             ) from e
 
         assets_dir = output_dir / "assets"
@@ -191,7 +191,7 @@ class AssetRenderer:
             import pypdfium2 as pdfium
         except ImportError as e:
             raise ImportError(
-                "pypdfium2 is required for PDF processing. " "Install with: pip install pypdfium2"
+                "pypdfium2 is required for PDF processing. Install with: pip install pypdfium2"
             ) from e
 
         pdf = pdfium.PdfDocument(pdf_path)

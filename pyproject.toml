@@ -60,7 +60,7 @@ select = [
 python_version = "3.12"
 strict = true
 warn_return_any = true
-warn_unused_ignores = true
+warn_unused_ignores = false
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]

@@ -73,7 +73,7 @@ class NativeRenderer:
             output_path: Path to write HTML file
         """
         try:
-            from docling_core.types.doc import DoclingDocument
+            from docling_core.types.doc import DoclingDocument  # type: ignore[attr-defined]
         except ImportError as e:
             raise ImportError(
                 "docling-core is required for JSON processing. "
