@@ -1,5 +1,7 @@
 # docling-view
 
+[![CI](https://github.com/runyaga/docling-view/actions/workflows/ci.yml/badge.svg)](https://github.com/runyaga/docling-view/actions/workflows/ci.yml)
+
 CLI tool for visualizing Docling document processing output.
 
 ## Installation
