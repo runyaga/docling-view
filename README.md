@@ -17,15 +17,50 @@ uv sync
 
 ## Usage
 
+docling-view accepts two input types: **PDF files** or **pre-processed Docling JSON**.
+
+### Input Types
+
+#### JSON Input (Recommended)
+
+For practical use, pre-process your PDF with [pdf-splitter](https://github.com/runyaga/pdf-splitter), which efficiently handles large documents by splitting them into chunks, processing each with Docling, and concatenating the results:
+
 ```bash
-# Native mode - uses Docling's save_as_html()
+# Step 1: Split PDF into chunks
+pdf-splitter chunk document.pdf -o ./chunks
+
+# Step 2: Process chunks and merge into single JSON
+pdf-splitter convert ./chunks -o ./output/document.json
+
+# Step 3: Copy original PDF to same folder as JSON (same base name)
+cp document.pdf ./output/document.pdf
+
+# Step 4: Visualize with docling-view
+docling-view ./output/document.json -m overlay --open
+```
+
+**Important**: The JSON and PDF must be in the same folder with the same base name (e.g., `document.json` and `document.pdf`). docling-view uses the PDF to render page backgrounds for the bounding box overlays.
+
+> **Note**: Running Docling directly on large PDFs (via `docling` CLI or passing PDFs to `docling-view`) is impractical due to memory and time constraints. Use pdf-splitter for documents larger than a few pages.
+
+#### PDF Input (Quick Preview)
+
+For quick previews of small documents, pass the PDF directly:
+
+```bash
 docling-view document.pdf -o output.html
+```
 
-# Overlay mode - interactive SVG with bounding boxes
-docling-view document.pdf -m overlay -o visualizer.html
+This runs Docling's full conversion pipeline internally, which can be slow for large documents.
 
-# Process pre-converted JSON
-docling-view docling_output.json -m overlay --open
+### Visualization Modes
+
+```bash
+# Native mode (default) - uses Docling's built-in HTML export
+docling-view document.json -o output.html
+
+# Overlay mode - interactive SVG with color-coded bounding boxes
+docling-view document.json -m overlay -o visualizer.html --open
 ```
 
 ### How Overlay Mode Works
