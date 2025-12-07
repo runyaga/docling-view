@@ -62,6 +62,9 @@ my_documents/
 ## Development
 
 ```bash
+# Install dev dependencies
+pip install -e ".[dev]"   # Or: uv sync --all-extras
+
 make dev          # Install dev dependencies + pre-commit hooks
 make test         # Run tests
 make test-cov     # Run tests with coverage

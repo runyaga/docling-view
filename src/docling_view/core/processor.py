@@ -3,7 +3,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from rich.console import Console
 
@@ -156,10 +156,13 @@ class DocumentProcessor:
             with open(input_path) as f:
                 json_data = json.load(f)
 
-            parsed = self.parser.parse(json_data, name=input_path.stem)
+            # Handle batch format (list of document results)
+            doc_data = self._extract_document_data(json_data)
+
+            parsed = self.parser.parse(doc_data, name=input_path.stem)
 
             # Find PDF and validate compatibility
-            pdf_path = self._find_source_pdf(input_path, json_data)
+            pdf_path = self._find_source_pdf(input_path, doc_data)
 
             if pdf_path:
                 self._validate_json_pdf_compatibility(parsed, pdf_path)
@@ -203,6 +206,51 @@ class DocumentProcessor:
             ) from e
         except Exception as e:
             raise ConversionError(f"Failed to convert PDF: {e}") from e
+
+    def _extract_document_data(self, json_data: dict[str, Any] | list[Any]) -> dict[str, Any]:
+        """
+        Extract document data from JSON, handling batch format.
+
+        Docling can output either:
+        - A single document dict (standard format)
+        - A list of {chunk_path, success, document_dict} objects (batch format)
+
+        Args:
+            json_data: Loaded JSON data (dict or list)
+
+        Returns:
+            The document dictionary to parse
+
+        Raises:
+            ConversionError: If no valid document found
+        """
+        # Standard single document format
+        if isinstance(json_data, dict):
+            return json_data
+
+        # Batch format: list of document results
+        if isinstance(json_data, list):
+            if not json_data:
+                raise ConversionError("Empty document list in JSON file")
+
+            # Find first successful document
+            for item in json_data:
+                if isinstance(item, dict) and item.get("success", True) and "document_dict" in item:
+                    if self.verbose:
+                        self.console.print(
+                            f"[blue]Extracting document from batch format "
+                            f"({len(json_data)} chunks)[/blue]"
+                        )
+                    return cast(dict[str, Any], item["document_dict"])
+
+            # Fallback: try first item's document_dict
+            first = json_data[0]
+            if isinstance(first, dict) and "document_dict" in first:
+                return cast(dict[str, Any], first["document_dict"])
+
+            raise ConversionError("Batch JSON format detected but no valid document_dict found")
+
+        raise ConversionError(f"Unexpected JSON format: {type(json_data).__name__}")
 
     def _parse_from_document(self, document: Any) -> ParsedDocument:
         """
